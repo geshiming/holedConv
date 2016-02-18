@@ -23,13 +23,14 @@ The results here are based on the MatConvNet-FCN code (not the original FCN/Deep
 Two experiments were adopted from the paper. The first is DeepLab-7x7 and the second is DeepLab-LargeFOV. They simply differ in the HoledConv parameters and network definitions.
 As stated in the paper, the LargeFOV is much faster due to two differences - a smaller filter size (3x3 instead of 7x7) and less filters in the fully connected layers (1024 instead of 4096). 
 When combined with CRF the authors state it performs on par as the 7x7 model. Without CRF it performs worse (as in the paper).
-As seen, these results are different from the results stated in the original paper. The paper uses the 2012 validation set. Possibly different learning parameters were used as well.
+As seen, these results are different from the results stated in the original paper: the paper uses the 2012 validation set and possibly different learning parameters were used as well.
+
 However, the hole algorithm seems to be usefull in producing finer resolution results than FCN (even without CRF), though the differences are subtle.
 
 Hope you find it usefull.
 
-# Technical notes:
-There are several implementations of the hole convolution in HoledConv. All of them result in the same output (disregarding numerical differences), but they vary in speed. They can be selected by setting the fwd_fn and bwd_fn properties in HoledConv. By default I'm using the version I've found to be fastest (`fwd_holed_local.m`), but a different one might be faster in other cases. The rest of the .m files can be discarded if needed.
+# Technical notes
+There are several implementations of the hole convolution in HoledConv. All of them result in the same output (disregarding small numerical differences), but they vary in speed. They can be selected by setting the `fwd_fn` and `bwd_fn` properties in HoledConv. By default I'm using the version I've found to be fastest (`fwd_holed_local.m`), but a different one might be faster in other cases. The rest of the .m files can be discarded if needed.
 There is also a simple `unit_test` method.
 
 As seen in `fcnTrain_holed.m`, replacing the existing convolutional layer with a holed convolution layer is simple:
