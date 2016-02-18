@@ -3,16 +3,16 @@
 classdef HoledConv < dagnn.Conv
     properties
         hole = 1
-
+        
         % for now we do not automatically detect if MatConvNet is running
         % using GPU. Adjust accordingly
         isGPU = true
-
+        
         % print time, for deubg purposes
         time_execution = false
         
-        % There are several implementations of the hole convolution. All of them result in the same output 
-        % (disregarding numerical differences), but they vary in speed. They can be selected by setting the 
+        % There are several implementations of the hole convolution. All of them result in the same output
+        % (disregarding numerical differences), but they vary in speed. They can be selected by setting the
         % fwd_fn and bwd_fn properties. Replace fwd with bwd for the backward propagation function. Also see comments within each function
         % 1: fwd_holed_simple: simple (will most likely fail when the hole is large)
         % 2: fwd_holed_batch_output: split the filter into batches over its fourth dimension (number of output neurons/channels)
@@ -128,36 +128,6 @@ classdef HoledConv < dagnn.Conv
             fprintf('Running backward local\n');
             [derX_l,derW_l,derB_l]=bwd_holed_local(X,W,B,derOutput,obj_info);
             fprintf('Numerical errors: input derivative %f, weights derivative %f, bias derivative %f\n',norm(derX_l(:)-derX_simple(:)),norm(derW_l(:)-derW_simple(:)),norm(derB_l(:)-derB_simple(:)));
-        end
-        function dummy()
-            if 0
-                A=reshape(1:49,7,7);
-                a=im2col(A,nfsz);
-                [xs,ys]=meshgrid(1:hole:nfsz(2),1:hole:nfsz(1));
-                keep=sub2ind(nfsz,ys(:),xs(:));
-                keepy=repmat(keep,1,size(a,2));
-                keepx=repmat(1:size(a,2),size(keepy,1),1);
-                newkeep=sub2ind(size(a),keepy,keepx);
-                b=a(newkeep);
-                col2im(b,[fh fw],[9 9],'distinct')
-                
-                B=repmat((size(A,1))*[0:size(A,2)-nfsz(2)],size(A,1)-nfsz(1)+1,1)+repmat(0:size(A,1)-nfsz(1),size(A,2)-nfsz(2)+1,1)';
-                B=B(:); B=B';
-                C=keep;
-                D=repmat(C,1,length(B))
-                E=repmat(B,size(D,1),1);
-                F=D+E
-                F=repmat(F,[1 1 size(A,3)]);
-                h=size(A,1);
-                w=size(A,2);
-                d=size(A,3);
-                wh=w*h;
-                G=wh.*[0:d-1];
-                G=reshape(G,[1 1 length(G)]);
-                G=repmat(G,[size(F) 1]);
-                H=bsxfun(@plus,F,G)
-                A(F)
-            end
         end
     end
     

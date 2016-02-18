@@ -30,7 +30,9 @@ However, the hole algorithm seems to be usefull in producing finer resolution re
 Hope you find it usefull.
 
 # Technical notes
-There are several implementations of the hole convolution in HoledConv. All of them result in the same output (disregarding small numerical differences), but they vary in speed. They can be selected by setting the `fwd_fn` and `bwd_fn` properties in HoledConv. By default I'm using the version I've found to be fastest (`fwd_holed_local.m`), but a different one might be faster in other cases. The rest of the .m files can be discarded if needed.
+The models can be trained and tested using `fcnTrain_holed.m` and `fcnTest_holed.m`. Set `opts.holedConv.largeFOV` to true in order to use the LargeFOV model, or false for the holed 7x7 model.
+
+There are several implementations of the hole convolution in the `HoledConv` layer. All of them result in the same output (disregarding small numerical differences), but they vary in speed. They can be selected by setting the `fwd_fn` and `bwd_fn` properties in HoledConv. By default I'm using the version I've found to be fastest (`fwd_holed_local.m`), but a different one might be faster in other cases. The rest of the .m files can be discarded if needed.
 There is also a simple `unit_test` method.
 
 As seen in `fcnTrain_holed.m`, replacing the existing convolutional layer with a holed convolution layer is simple:
