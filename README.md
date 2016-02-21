@@ -1,4 +1,4 @@
-# HoledConv Layer in [MatConvNet] (http://www.vlfeat.org/matconvnet/)
+# Holed Convolution Layer in [MatConvNet] (http://www.vlfeat.org/matconvnet/)
 This is a crude implementation in MatConvNet of the 'hole' algorithm described in [Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs] (http://arxiv.org/abs/1412.7062).
 The only implemented part is the 'hole' algorithm, without any CRF afterwards.
 Note that the full (and more efficient) implementation by the original authors is available at the [DeepLab] (https://bitbucket.org/deeplab/deeplab-public/) site and this implementation is not related to them. 
@@ -16,16 +16,17 @@ However, when training and testing on the PASCAL VOC 2011 validation, using [Mat
 | FCN-32s              | RV-VOC11  | 60.61   | 89.65              | 75.14          |
 | FCN-8s               | RV-VOC11  | 62.00   | 89.72              | 79.35          |
 | hole (7x7)           | RV-VOC11  | 61.51   | 90.01              | 76.00          |
-| hole (3x3, LargeFOV) | RV-VOC11  | running | running            | running        |
+| hole (3x3, LargeFOV) | RV-VOC11  | 57.67   | 88.37              | 76.60          |
 
  
 The results here are based on the MatConvNet-FCN code (not the original FCN/DeepLab models), using PASCAL VOC 2011 validation set with additional segmentation (setting `opts.vocAdditionalSegmentations` to true).
+
 Two experiments were adopted from the paper. The first is DeepLab-7x7 and the second is DeepLab-LargeFOV. They simply differ in the HoledConv parameters and network definitions.
-As stated in the paper, the LargeFOV is much faster due to two differences - a smaller filter size (3x3 instead of 7x7) and less filters in the fully connected layers (1024 instead of 4096). 
+As stated in the paper, the LargeFOV is much faster due to two differences - a smaller filter size (3x3 instead of 7x7) and using less filters in the fully connected layers (1024 instead of 4096). 
 When combined with CRF the authors state it performs on par as the 7x7 model. Without CRF it performs worse (as in the paper).
 As seen, these results are different from the results stated in the original paper: the paper uses the 2012 validation set and possibly different learning parameters were used as well.
 
-However, the hole algorithm seems to be usefull in producing finer resolution results than FCN (even without CRF), though the differences are subtle.
+However, the hole algorithm seems to be usefull in producing finer resolution results than FCN (even without CRF), for example when trying to segment edges.
 
 Hope you find it usefull.
 
